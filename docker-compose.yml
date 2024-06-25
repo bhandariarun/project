@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - ~/data/postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=zakipoint
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  backend:
+    build: ./mdashboard-api
+    volumes:
+      - ./mdashboard-api:/mdashboard-api
+    ports:
+      - 8000:8000
+    image: app:django
+    container_name: backend
+    command: /mdashboard-api/entrypoint.sh
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=zakipoint
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    volumes:
+      - frontend:/app/build
+    ports:
+      - 5173:5173
+    image: app:frontend
+    container_name: frontend
+    depends_on:
+      - backend
+
+  # nginx: 
+  #   build: 
+  #     context: ./nginx
+  #   volumes:
+  #     - ./mdashboard-api:/django
+  #     - frontend:/var/www/frontend
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #     - backend
+  #     - frontend
+
+
+volumes:
+  frontend:
