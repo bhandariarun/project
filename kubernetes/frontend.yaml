@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: codedai/frontend:v1
+        ports:
+        - containerPort: 5173
+        volumeMounts:
+        - name: frontend-build
+          mountPath: /app/build
+      volumes:
+      - name: frontend-build
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: NodePort
+  selector:
+    app: frontend
+  ports:
+    - port: 5173
+      targetPort: 5173
+      nodePort: 30001  # You can choose any port between 30000-32767
