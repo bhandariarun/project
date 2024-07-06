@@ -84,8 +84,9 @@ python3 -m pip install psycopg2
 ## React Setup
 
 ### Install dependencies:
-    ```bash
-    pnpm install
+```bash
+pnpm install
+```
 
 ### Usage
 
