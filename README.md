@@ -86,7 +86,6 @@ python3 -m pip install psycopg2
 ### Install dependencies:
     ```bash
     pnpm install
-    ```
 
 ### Usage
 
